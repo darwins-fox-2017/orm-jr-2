@@ -99,21 +99,33 @@ class Student {
   }
 
   static findOrCreate(connection, data) {
-    let FIND_OR_CREATE = `INSERT OR IGNORE INTO students(firstname, lastname, cohort_id) VALUES ('${data.firstname}', '${data.lastname}', ${data.cohort_id});`
+    let CREATE  = `INSERT INTO students(firstname, lastname, cohort_id) VALUES ('${data.firstname}', '${data.lastname}', ${data.cohort_id});`
+    let FIND    = `SELECT * FROM students WHERE firstname = '${data.firstname}' AND lastname = '${data.lastname}' AND cohort_id = ${data.cohort_id};`
 
     connection.serialize(function(){
-      connection.run(FIND_OR_CREATE, function(err){
-        if (!err) {
-          console.log(".:: FIND OR CREATE DATA STUDENT SUCCESS ::.");
-        } else {
+      connection.all(FIND, function(err, rows){
+        if (err) {
           console.log(err);
+        } else {
+            if (rows.length == 0) {
+              // console.log('TEST');
+              connection.run(CREATE, function(err){
+                if (err) {
+                  console.log(err);
+                } else {
+                  console.log(".:: CREATE DATA STUDENT SUCCESS ::.");
+                }
+              })
+            } else {
+              console.log(rows);
+            }
         }
       })
     })
   }
 
   static help() {
-    let menu = `create(connection, data)\nupdate(connection, data)\ndelete(connection, id)\nfindById(connection, id)\nfindAll(connection, cb)\nwhere(connection, value, data)`
+    let menu = `create(connection, data)\nupdate(connection, data)\ndelete(connection, id)\nfindById(connection, id)\nfindAll(connection, cb)\nwhere(connection, value, data)\nfindOrCreate(connection, data)`
     console.log(menu);
   }
 }
@@ -128,4 +140,5 @@ export default Student
 // Student.where(dbModel.connection, "firstname = 'Isumi'", function(data, err) {if(!err) {for(var i=0; i<data.length; i++) {console.log(data[i]);}} else {console.log('Error');}})
 // Student.findAll(dbModel.connection, {limit:2, offset: 1}, function(data, err) { if(!err) { for(var i=0; i<data.length; i++) { console.log(data[i]); } } else { console.log('Error'); } })
 // Student.findOrCreate(dbModel.connection, new Student("Aiko", "Aurora", 1))
+// Student.findOrCreate(dbModel.connection, new Student("Karina", "Putri", 2))
 // Student.help()

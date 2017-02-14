@@ -99,14 +99,26 @@ class Cohort {
   }
 
   static findOrCreate(connection, data) {
-    let FIND_OR_CREATE = `INSERT OR IGNORE INTO cohorts(cohort_name) VALUES ('${data.cohort_name}');`
+    let CREATE  = `INSERT INTO cohorts(cohort_name) VALUES ('${data.cohort_name}');`
+    let FIND    = `SELECT * FROM cohorts WHERE cohort_name = '${data.cohort_name}';`
 
     connection.serialize(function(){
-      connection.run(FIND_OR_CREATE, function(err){
-        if (!err) {
-          console.log(".:: FIND OR CREATE DATA COHORT SUCCESS ::.");
-        } else {
+      connection.all(FIND, function(err, rows){
+        if (err) {
           console.log(err);
+        } else {
+            if (rows.length == 0) {
+              // console.log('TEST');
+              connection.run(CREATE, function(err){
+                if (err) {
+                  console.log(err);
+                } else {
+                  console.log(".:: CREATE DATA COHORT SUCCESS ::.");
+                }
+              })
+            } else {
+              console.log(rows);
+            }
         }
       })
     })
@@ -126,5 +138,5 @@ export default Cohort
 // Cohort.delete(dbModel.connection, 1)
 // Cohort.findById(dbModel.connection, 2)
 // Cohort.findAll(dbModel.connection, {limit:2, offset: 1}, function(data, err) { if(!err) { for(var i=0; i<data.length; i++) { console.log(data[i]); } } else { console.log('Error'); } })
-// Cohort.findOrCreate(dbModel.connection, new Student("Cross Fox", 3))
+// Cohort.findOrCreate(dbModel.connection, new Cohort("Cross Fox", 1))
 // Cohort.where(dbModel.connection, "cohort_name = 'Darwin Fox 2017'", function(data, err) {if(!err) {for(var i=0; i<data.length; i++) {console.log(data[i]);}} else {console.log('Error');}})
