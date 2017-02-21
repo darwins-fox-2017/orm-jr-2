@@ -29,6 +29,9 @@ class DBModel {
     })
   }
 }
+
+
+
 // let dbMod = new DBModel('../db/student.db')
 // dbMod.setup()
 
