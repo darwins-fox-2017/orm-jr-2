@@ -20,6 +20,7 @@ if (arg.length>2) {
      r.context.updateStudent=Student.updateStudent
      r.context.showAllStudent=Student.showAllStudent
      r.context.findAll=Student.findAll
+     r.context.findStudent=Student.findStudent
      r.context.findOrCreate=Student.findOrCreate
      r.context.generateFakeStudentData=Student.generateFakeStudentData
      r.context.generateFakeCohortData=Cohort.generateFakeCohortData

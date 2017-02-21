@@ -66,6 +66,18 @@ class Student {
     })
   }
 
+  static findStudent(db, fieldName, value){
+    let SHOW_ALL_STUDENT_BY = `SELECT * FROM students WHERE ${fieldName} = (?)`
+    db.each(SHOW_ALL_STUDENT_BY, [value], function(err, row){
+      console.log(fieldName, value);
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(row);
+      }
+    })
+  }
+
   static removeStudent(db, id){
     let DELETE_STUDENT_QUERY = `DELETE FROM students WHERE id = ${id}`
     db.run(DELETE_STUDENT_QUERY, function(err){
@@ -106,6 +118,7 @@ class Student {
     console.log(`Update student data : type updateStudent(db, studentId, fieldName, newValue)`);
     console.log(`Remove a student : type removeStudent(db, id)`);
     console.log(`Find all student with Paggination : findAll(db, paggination)`);
+    console.log(`Find student by ? : findStudent(db, fieldName, value)`);
     console.log(`Find or Create student : findOrCreate(db, new Student(firstName, lastName, cohortId))`);
     console.log('----------------------------------------------');
     // Cohort
