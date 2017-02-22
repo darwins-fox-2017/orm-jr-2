@@ -1,72 +1,77 @@
 "use strict"
+const sqlite = require('sqlite3').verbose()
 
 class Student {
-  constructor(firstName, lastName, phone, cohortId, id){
-    this.id = id
-    this.firstName = firstName
-    this.lastName = lastName
-    this.phone = phone
-    this.cohortId = cohortId
+  constructor(firstname, lastname, phone, cohortId, id){
+      this.id = id
+      this.firstname = firstname
+      this.lastname = lastname
+      this.phone = phone
+      this.cohortId = cohortId
   }
 
-  static create(db, data){
-    let SEED_DATA_STUDENT = `INSERT INTO students(firstName, lastName, phone,cohortId) VALUES('${data.firstName}','${data.lastName}','${data.phone}','${data.cohortId}')`
+  static create(db, student){
+    let query_create = `INSERT INTO students (firstname, lastname, phone, cohortId) VALUES ('${student.firstname}', '${student.lastname}','${student.phone}', '${student.cohortId}');`
     db.serialize(function(){
-      db.run(SEED_DATA_STUDENT, function(err) {
-        err ? console.log(err):console.log(`SEED DATA STUDENT SUCCESSFUL`)
+      db.run(query_create, function(err){
+        if(err) { console.log(err) } else {console.log('DATA CREATED');}
       })
     })
   }
 
-  static update(db, data){
-    let EDIT_DATA_STUDENT  = `UPDATE students SET firstName = '${data.firstName}', lastName = '${data.lastName}', phone = '${data.phone}', cohortId = '${data.cohortId}' WHERE id = ${data.id}`
+  static update(db, student){
+    let query_update = `UPDATE students SET firstname = '${student.firstname}', lastname = '${student.lastname}', phone = '${student.phone}', cohortId = '${student.c}' WHERE id = '${student.id}'`
     db.serialize(function(){
-      db.run(EDIT_DATA_STUDENT, function(err){
-        err ? console.log(err):console.log(`UPDATE DATA STUDENT SUCCESSFUL`);
+      db.run(query_update, function(err){
+        if(err) { console.log(err) } else {console.log('DATA UPDATED');}
       })
     })
   }
 
   static delete(db, id){
-    let DELETE_DATA_STUDENT = `DELETE FROM students WHERE id = '${id}'`
+    let query_delete = `DELETE FROM students WHERE id = '${id}'`
     db.serialize(function(){
-      db.run(DELETE_DATA_STUDENT, function(err) {
-        err ? console.log(err):console.log(`DELETE DATA STUDENT SUCCESSFUL`);
+      db.run(query_delete, function(err){
+        if(err) { console.log(err) } else {console.log('DATA DELETED');}
       })
     })
   }
 
   static findById(db, id){
-    let findById = `SELECT * FROM students WHERE id LIKE '${id}'`
-    db.serialize(function() {
-      db.each(findById, function(err, row) {
-        err ? console.log(err):console.log(row)
+    let query_findById = `SELECT * FROM students WHERE id = '${id}'`
+    db.serialize(function(){
+      db.each(query_findById, function(err,row){
+        if(err) { console.log(err) } else {console.log(row);}
       })
     })
   }
 
-  static findAll(db, value, data){
-    let SELECT_ALL = "SELECT * FROM students LIMIT ? OFFSET ?"
+  static findAll(db){
+    let query_findAll = `SELECT * FROM students;`
     db.serialize(function(){
-      db.all(SELECT_ALL, value.limit, value.offset, data)
+      db.each(query_findAll, function(err,row){
+        if(err) { console.log(err) } else {console.log(row);}
+      })
     })
   }
-
-  static findOrCreate(db, data){
+  
+  static findOrCreate(db, student){
     let FIND_OR_CREATE = `SELECT * FROM students WHERE firstName = ? AND lastName = ? AND phone = ? AND cohortId = ?`;
     db.serialize(function(){
-      db.all(FIND_OR_CREATE, data.firstName, data.lastName, data.phone, data.cohortId, (err, row)=> {
-        row.length > 0 ? console.log(`STUDENT IS ALREADY EXISTS`):Student.create(db, data)
+      db.all(FIND_OR_CREATE, student.firstName, student.lastName, student.phone, student.cohortId, (err, row)=> {
+        row.length > 0 ? console.log(`STUDENT IS ALREADY EXISTS`):Student.create(db, student)
       })
     })
   }
 
-  static where(db, value, data){
-    let WHERE_STUDENT = "SELECT * FROM students WHERE "
+  static where(db, value, callback){
+    let query_where = `SELECT * FROM students WHERE ${value}`
     db.serialize(function(){
-      db.all(WHERE_STUDENT + value, data)
+      db.all(query_where, callback)
     })
   }
+
+
 
 }
 

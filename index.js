@@ -6,7 +6,7 @@ import DBModel from "./models/db_model.js";
 import Cohort from "./models/cohort.js";
 import Student from "./models/student.js";
 
-let db = new DBModel("./db/student.db")
+let db = new DBModel("./db/test.db")
 let argv = process.argv[2]
 
 class Help {
@@ -29,13 +29,26 @@ if (argv == "playtime") {
   start.context.Help = Help.help
 }
 
-//Driver TEST CODE fro STUDENT
-// Student.create(dbModel.connection, new Student("Eri","Irawan",123456789,1))
-// Student.update(dbModel.connection, new Student("Ei", "Irawan",123456789,1,1))
-// Student.delete(dbModel.connection, 1)
+//Student
+
+// Student.create(dbModel.connection, new Student("asep","ganteng",1234567,1))
+// Student.update(dbModel.connection, new Student("sam", "ganeng",1234567,1,1))
+// Student.delete(dbModel.connection, 2)
 // Student.findById(dbModel.connection, 1)
 
-// Student.findAll(dbModel.connection, {limit:2, offset:1}, function(err, data){
+// Student.findAll(dbModel.connection, function(data, err){
+//   if(!err){
+//     for(let i = 0; i < data.length; i++){
+//       console.log(data[i])
+//     }
+//   }else {
+//       console.log(err);
+//   }
+// })
+
+// Student.findOrCreate(dbModel.connection, new Student("raisa","andriana",08992969500,2))
+
+// Student.where(dbModel.connection, "firstName = 'raisa'", function(err, data){
 //   if(!err){
 //     for(let i = 0; i < data.length; i++){
 //       console.log(data[i])
@@ -45,35 +58,26 @@ if (argv == "playtime") {
 //   }
 // })
 
-// Student.findOrCreate(dbModel.connection, new Student("vino","bastian",0987654321,2))
-
-// Student.where(dbModel.connection, "firstName = 'Eri'", function(err, data){
-//   if(!err){
-//     for(let i = 0; i < data.length; i++){
-//       console.log(data[i])
-//     }
-//   }else {
-//     console.log(err)
-//   }
-// })
 
 //Cohort
-// Cohort.create(dbModel.connection, new Cohort("Angkata 1"))
+
+// Cohort.create(dbModel.connection, new Cohort("Angkatan 2"))
 // Cohort.update(dbModel.connection, new Cohort("Angkatan 2",1))
 // Cohort.delete(dbModel.connection, 1)
 // Cohort.findById(dbModel.connection, 1)
 
-// Student.findAll(dbModel.connection, {limit:2, offset:1}, function(err, data){
+// Cohort.findAll(dbModel.connection, function(data, err){
 //   if(!err){
 //     for(let i = 0; i < data.length; i++){
 //       console.log(data[i])
 //     }
 //   }else {
-//     console.log(err)
+//       console.log(err);
 //   }
 // })
 
-// Student.findOrCreate(dbModel.connection, new Student("vino","bastian",0987654321,2))
+// Student.findOrCreate(dbModel.connection, new Student("xxx","vvv",08992969500,2))
+
 // Cohort.where(dbModel.connection, "name = 'Angkatan 2'", function(err, data){
 //   if(!err){
 //     for(let i = 0; i < data.length; i++){
